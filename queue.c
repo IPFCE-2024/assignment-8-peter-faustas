@@ -55,7 +55,7 @@ int dequeue(queue *q) {
 // Opgave 4
 
 void push(int element, node **head) {
-    node* newNode = (node*)malloc(sizeof(node));
+    node *newNode = (node*)malloc(sizeof(node));
     newNode->data = element;
     newNode->next = *head;
     *head = newNode;
@@ -66,35 +66,36 @@ int pop(node **head) {
         printf("Stack is empty\n");
         return -1;
     }
-    int poppedValue = (*head)->data;
     node* temp = *head;
+    int poppedValue = temp->data;
     *head = (*head)->next;
     free(temp);
     return poppedValue;
 }
 
 void enqueueStack(queue *q, int x) {
-    push(x, &q->front);
+    push(x, &q->rear);
     q->size++;
 }
 
 int dequeueStack(queue *q) {
-    if (q->front == NULL){
+    if (q->size == NULL){
         printf("Queue is empty\n");
         return -1;
     }
-    node* tempHead = NULL;
+    if (q->front == NULL){
+        while (q->rear != NULL){
+            int popped_value = pop(&(q->rear));
+            push(popped_value, &(q->front));
+        }
+    }
+    
+    int dequeued_value = pop(&(q->front));
 
-    while (tempHead != NULL){
-        push(pop(&q->front), &tempHead);
+    if (dequeued_value != -1){
+        q->size--;
     }
 
-    int dequeuedValue = pop(&tempHead);
-
-    while (tempHead != NULL){
-        push(pop(&tempHead), &q->front);
-    }
-
-    return dequeuedValue;
+    return dequeued_value;
 }
 
